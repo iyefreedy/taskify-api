@@ -1,14 +1,16 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 import { ResponseError } from "../models/response-error";
+import logging from "../utils/logging";
 
 export default function errorMiddleware(
   err: Error,
-  req: Request,
-  res: Response
+  _req: Request,
+  res: Response,
+  _next: NextFunction
 ) {
   if (err instanceof ZodError) {
-    return res.status(401).json({
+    return res.status(400).json({
       error: err.errors,
     });
   }
