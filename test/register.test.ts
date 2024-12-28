@@ -31,7 +31,7 @@ describe("Create new user test", () => {
     const response = await supertest(app).post("/api/register").send({
       name: "User Test",
       email: "test1@example.com",
-      password: "test",
+      password: "password",
     });
 
     expect(response.status).toEqual(400);
@@ -42,7 +42,7 @@ describe("Create new user test", () => {
     const response = await supertest(app).post("/api/register").send({
       name: "User Test 2",
       email: "test2@example.com",
-      password: "test123456",
+      password: "password",
     });
 
     expect(response.status).toEqual(201);

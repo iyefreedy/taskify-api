@@ -1,9 +1,11 @@
+import bcrypt from "bcrypt";
 import { ResponseError } from "../models/response-error";
 import { AuthSchema } from "../schema/auth-schema";
-import { RegisterRequest } from "../types";
+import { LoginRequest, RegisterRequest } from "../types";
 import database from "../utils/database";
 import { Validation } from "../utils/validation";
-import bcrypt from "bcrypt";
+import { createAccessToken } from "../utils/jwt";
+import logging from "../utils/logging";
 
 export class AuthService {
   static async register(request: RegisterRequest) {
@@ -36,5 +38,31 @@ export class AuthService {
     });
 
     return newUser;
+  }
+
+  static async login(request: LoginRequest) {
+    const loginRequest = Validation.validate(AuthSchema.LOGIN, request);
+
+    const user = await database.user.findUnique({
+      where: { email: loginRequest.email },
+    });
+
+    logging.info(user);
+    if (user === null) {
+      throw new ResponseError(400, "Invalid credential");
+    }
+
+    const isPasswordMatch = await bcrypt.compare(
+      request.password,
+      user.password
+    );
+
+    if (!isPasswordMatch) {
+      throw new ResponseError(400, "Invalid credential");
+    }
+
+    const accessToken = createAccessToken({ sub: user.id });
+
+    return { accessToken };
   }
 }

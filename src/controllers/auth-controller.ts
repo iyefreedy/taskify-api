@@ -10,4 +10,13 @@ export class AuthController {
       return next(error);
     }
   }
+
+  static async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await AuthService.login(req.body);
+      return res.status(200).json(result);
+    } catch (error) {
+      return next(error);
+    }
+  }
 }
