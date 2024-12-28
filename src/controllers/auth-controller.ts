@@ -1,8 +1,8 @@
-import e from "express";
+import { Request, Response, NextFunction } from "express";
 import { AuthService } from "../services/auth-service";
 
 export class AuthController {
-  static async register(req: e.Request, res: e.Response, next: e.NextFunction) {
+  static async register(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await AuthService.register(req.body);
       return res.status(200).json(result);
