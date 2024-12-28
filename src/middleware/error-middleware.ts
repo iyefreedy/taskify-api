@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 import { ResponseError } from "../models/response-error";
+import { JsonWebTokenError } from "jsonwebtoken";
 
 export default function errorMiddleware(
   err: Error,
@@ -16,6 +17,12 @@ export default function errorMiddleware(
 
   if (err instanceof ResponseError) {
     return res.status(err.status).json({ error: err.message });
+  }
+
+  if (err instanceof JsonWebTokenError) {
+    return res.status(401).json({
+      error: err.message,
+    });
   }
 
   return res.status(500).json({ error: err.message });

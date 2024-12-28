@@ -1,3 +1,5 @@
+import { User } from "@prisma/client";
+
 export type RegisterRequest = {
   name: string;
   email: string;
@@ -15,6 +17,13 @@ declare global {
       NODE_ENV: "development" | "production";
       JWT_SECRET: string;
       JWT_EXPIRES_IN: string;
+      JWT_ISSUER: string;
+    }
+  }
+
+  namespace Express {
+    interface Request {
+      user?: User;
     }
   }
 }
