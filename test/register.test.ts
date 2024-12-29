@@ -18,12 +18,9 @@ describe("Create new user test", () => {
   afterEach(async () => {
     await database.user.deleteMany({
       where: {
-        email: "test1@example.com",
-      },
-    });
-    await database.user.deleteMany({
-      where: {
-        email: "test2@example.com",
+        email: {
+          in: ["test1@example.com", "test2@example.com"],
+        },
       },
     });
   });
