@@ -5,7 +5,6 @@ export class TodoSchema {
     title: z.string().min(1),
     content: z.string().optional(),
     dueDate: z.date().optional(),
-    done: z.boolean().optional(),
   });
 
   static readonly UPDATE = z

@@ -24,12 +24,13 @@ model User {
 }
 
 model Todo {
-  id        Int      @id @default(autoincrement()) @db.UnsignedInt
-  title     String   @db.VarChar(100)
-  content   String   @db.Text
-  done      Boolean  @default(false)
-  createdAt DateTime @default(now()) @db.Timestamp(3)
-  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(3)
+  id        Int       @id @default(autoincrement()) @db.UnsignedInt
+  title     String    @db.VarChar(100)
+  content   String?   @db.Text
+  done      Boolean   @default(false)
+  dueDate   DateTime? @db.Date
+  createdAt DateTime  @default(now()) @db.Timestamp(3)
+  updatedAt DateTime  @default(now()) @updatedAt @db.Timestamp(3)
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
 }

@@ -11,6 +11,19 @@ export type LoginRequest = {
   password: string;
 };
 
+export type CreateTodoRequest = {
+  title: string;
+  content?: string;
+  dueDate?: Date;
+};
+
+export type EditTodoRequest = {
+  title?: string;
+  content?: string;
+  dueDate?: Date;
+  done?: boolean;
+};
+
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
