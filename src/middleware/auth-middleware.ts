@@ -5,17 +5,21 @@ import database from "../utils/database";
 
 export default async function authMiddleware(
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ) {
   try {
     const authHeader = req.header("Authorization");
 
     if (authHeader === undefined) {
-      throw new ResponseError(401, "Unauthorized");
+      throw new ResponseError(401, "Authorization header required");
     }
 
-    const accessToken = authHeader.substring(7);
+    if (!authHeader.startsWith("Bearer ")) {
+      throw new ResponseError(401, "Invalid access token");
+    }
+
+    const accessToken = authHeader.slice(7);
     const payload = verifyAccessToken(accessToken);
 
     const userId =
