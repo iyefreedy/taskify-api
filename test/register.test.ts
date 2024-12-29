@@ -1,21 +1,31 @@
 import supertest from "supertest";
 import app from "../src/app";
 import database from "../src/utils/database";
-import logging from "../src/utils/logging";
+import bcrypt from "bcrypt";
 
 describe("Create new user test", () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
+    const hashedPassword = await bcrypt.hash("password", 10);
     await database.user.create({
       data: {
         name: "User Test",
         email: "test1@example.com",
-        password: "password",
+        password: hashedPassword,
       },
     });
   });
 
-  afterAll(async () => {
-    await database.user.deleteMany();
+  afterEach(async () => {
+    await database.user.deleteMany({
+      where: {
+        email: "test1@example.com",
+      },
+    });
+    await database.user.deleteMany({
+      where: {
+        email: "test2@example.com",
+      },
+    });
   });
 
   it("should failed due to invalid parameter", async () => {
@@ -41,7 +51,7 @@ describe("Create new user test", () => {
 
   it("should success to create new user", async () => {
     const response = await supertest(app).post("/api/register").send({
-      name: "User Test 2",
+      name: "User Test 1",
       email: "test2@example.com",
       password: "password",
     });
