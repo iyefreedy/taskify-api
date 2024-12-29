@@ -1,6 +1,7 @@
 import supertest from "supertest";
 import app from "../src/app";
 import database from "../src/utils/database";
+import logging from "../src/utils/logging";
 
 describe("Create new user test", () => {
   beforeAll(async () => {
@@ -45,8 +46,7 @@ describe("Create new user test", () => {
       password: "password",
     });
 
-    expect(response.status).toEqual(201);
-    expect(response.body.email).toEqual("test2@example.com");
-    expect(response.body.name).toEqual("User Test 2");
+    expect(response.status).toEqual(200);
+    expect(response.body.accessToken).toBeDefined();
   });
 });

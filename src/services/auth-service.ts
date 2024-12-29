@@ -28,16 +28,11 @@ export class AuthService {
         email: registerRequest.email,
         password: hashedPassword,
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
 
-    return newUser;
+    const accessToken = createAccessToken({ sub: newUser.id });
+
+    return { accessToken };
   }
 
   static async login(request: LoginRequest) {
