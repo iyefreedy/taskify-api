@@ -27,6 +27,13 @@ export default async function authMiddleware(
 
     const authenticatedUser = await database.user.findFirst({
       where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
     if (authenticatedUser === null) {
