@@ -30,7 +30,7 @@ export class AuthService {
       },
     });
 
-    const accessToken = createAccessToken({ sub: newUser.id });
+    const accessToken = await createAccessToken({ sub: newUser.id });
 
     return { accessToken };
   }
@@ -56,7 +56,7 @@ export class AuthService {
       throw new ResponseError(400, "Invalid credential");
     }
 
-    const accessToken = createAccessToken({ sub: user.id });
+    const accessToken = await createAccessToken({ sub: user.id });
 
     return { accessToken };
   }
