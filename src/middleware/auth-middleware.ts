@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { ResponseError } from "../models/response-error";
-import { verifyAccessToken } from "../utils/jwt";
+
 import database from "../utils/database";
+import { verifyAccessToken } from "../utils/jwt";
 
 export default async function authMiddleware(
   req: Request,
@@ -20,10 +21,10 @@ export default async function authMiddleware(
     }
 
     const accessToken = authHeader.slice(7);
-    const payload = verifyAccessToken(accessToken);
 
-    const userId =
-      typeof payload.sub === "function" ? payload.sub() : payload.sub;
+    const { payload } = await verifyAccessToken(accessToken);
+
+    const userId = payload.sub;
 
     if (userId === undefined) {
       throw new ResponseError(401, "Unauthorized");
@@ -47,7 +48,7 @@ export default async function authMiddleware(
     req.user = authenticatedUser;
 
     return next();
-  } catch (error) {
+  } catch (error: unknown) {
     return next(error);
   }
 }

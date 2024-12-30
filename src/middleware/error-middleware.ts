@@ -1,13 +1,17 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 import { ResponseError } from "../models/response-error";
-import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import { errors } from "jose";
+import logging from "../utils/logging";
 
 export default function errorMiddleware(
   err: Error,
   _req: Request,
-  res: Response
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _next: NextFunction
 ) {
+  logging.error(err);
   if (err instanceof ZodError) {
     return res.status(400).json({
       error: err.errors,
@@ -18,15 +22,15 @@ export default function errorMiddleware(
     return res.status(err.status).json({ error: err.message });
   }
 
-  if (err instanceof JsonWebTokenError) {
+  if (err instanceof errors.JWTExpired) {
     return res.status(401).json({
-      error: err.message,
+      error: "Session expired",
     });
   }
 
-  if (err instanceof TokenExpiredError) {
+  if (err instanceof errors.JWTExpired) {
     return res.status(401).json({
-      error: "Session expired",
+      error: "Access token invalid",
     });
   }
 
