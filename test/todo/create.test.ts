@@ -27,7 +27,7 @@ describe("POST /api/todos", () => {
   });
 
   it("should create a new todo with the related user from the authorization header", async () => {
-    const token = createAccessToken({
+    const token = await createAccessToken({
       sub: "545f163c-23a5-4174-9855-7f4876c29399",
     });
 
