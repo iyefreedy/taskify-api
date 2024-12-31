@@ -4,7 +4,7 @@ export class TodoSchema {
   static readonly CREATE = z.object({
     title: z.string().min(1),
     content: z.string().optional(),
-    dueDate: z.string().pipe(z.coerce.date()),
+    dueDate: z.string().pipe(z.coerce.date()).optional(),
   });
 
   static readonly UPDATE = z
