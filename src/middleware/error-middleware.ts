@@ -28,7 +28,10 @@ export default function errorMiddleware(
     });
   }
 
-  if (err instanceof errors.JWTExpired) {
+  if (
+    err instanceof errors.JWTInvalid ||
+    err instanceof errors.JWSSignatureVerificationFailed
+  ) {
     return res.status(401).json({
       error: "Access token invalid",
     });
