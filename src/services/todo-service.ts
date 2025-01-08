@@ -1,6 +1,6 @@
 import { ResponseError } from "../models/response-error";
 import { TodoSchema } from "../schema/todo-schema";
-import { CreateTodoRequest } from "../types";
+import { CreateTodoRequest, EditTodoRequest } from "../types";
 import database from "../utils/database";
 import { Validation } from "../utils/validation";
 
@@ -52,7 +52,7 @@ export class TodoService {
   static async update(
     userId: string,
     todoId: number,
-    request: CreateTodoRequest
+    request: EditTodoRequest
   ) {
     const todoRequest = Validation.validate(TodoSchema.UPDATE, request);
 
@@ -81,6 +81,7 @@ export class TodoService {
         title: todoRequest.title,
         content: todoRequest.content,
         dueDate: todoRequest.dueDate,
+        done: todoRequest.done,
         userId: userId,
       },
     });
