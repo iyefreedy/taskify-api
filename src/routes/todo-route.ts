@@ -5,12 +5,16 @@ import { getResourceId } from "../middleware/validation-middleware";
 
 const todoRoute = Router();
 todoRoute
-  .use(authMiddleware)
-  .get("/api/todos", TodoController.findAll)
-  .post("/api/todos", TodoController.create)
-  .get("/api/todos/:id", getResourceId, TodoController.find)
-  .put("/api/todos/:id", getResourceId, TodoController.update)
-  .patch("/api/todos/:id", getResourceId, TodoController.update)
-  .delete("/api/todos/:id", getResourceId, TodoController.delete);
+  .get("/api/todos", authMiddleware, TodoController.findAll)
+  .post("/api/todos", authMiddleware, TodoController.create)
+  .get("/api/todos/:id", authMiddleware, getResourceId, TodoController.find)
+  .put("/api/todos/:id", authMiddleware, getResourceId, TodoController.update)
+  .patch("/api/todos/:id", authMiddleware, getResourceId, TodoController.update)
+  .delete(
+    "/api/todos/:id",
+    authMiddleware,
+    getResourceId,
+    TodoController.delete
+  );
 
 export default todoRoute;

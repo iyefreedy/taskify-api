@@ -13,5 +13,9 @@ app.use(authRoute);
 app.use(userRoute);
 app.use(todoRoute);
 app.use(errorMiddleware);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((_req, res, _next) => {
+  return res.status(404).json({ error: "Resource path not found" });
+});
 
 export default app;

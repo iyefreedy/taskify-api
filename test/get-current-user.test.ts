@@ -48,7 +48,7 @@ describe("Get current user from request request", () => {
   });
 
   it("should success to get current user information", async () => {
-    const accessToken = createAccessToken({
+    const accessToken = await createAccessToken({
       sub: "545f163c-23a5-4174-9855-7f4876c29389",
     });
     const response = await supertest(app)
