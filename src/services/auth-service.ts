@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { InvalidRequestError } from "../models/http-error";
 import AuthSchema from "../schema/auth-schema";
-import { LoginRequest, RegisterRequest } from "../types";
+import { LoginRequest, RegisterRequest } from "../models/auth-request";
 import database from "../core/database";
 import { validate } from "../utils/validation";
 import { createAccessToken } from "../utils/jwt";

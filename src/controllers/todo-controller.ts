@@ -4,7 +4,7 @@ import { TodoService } from "../services/todo-service";
 export default class TodoController {
   static async findAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await TodoService.findAll(req.user!.id);
+      const result = await TodoService.findAll(req.user.id);
 
       return res.status(200).json(result);
     } catch (error) {
@@ -14,7 +14,7 @@ export default class TodoController {
   static async find(req: Request, res: Response, next: NextFunction) {
     try {
       const todoId = parseInt(req.params.id);
-      const result = await TodoService.find(req.user!.id, todoId);
+      const result = await TodoService.find(req.user.id, todoId);
 
       return res.status(200).json(result);
     } catch (error) {

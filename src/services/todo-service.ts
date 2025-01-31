@@ -1,11 +1,12 @@
 import { ForbiddenError, NotFoundError } from "../models/http-error";
 import TodoSchema from "../schema/todo-schema";
-import { CreateTodoRequest, EditTodoRequest } from "../types";
+import { CreateTodoRequest, EditTodoRequest } from "../models/todo-request";
 import database from "../core/database";
 import { validate } from "../utils/validation";
+import { Todo } from "@prisma/client";
 
 export class TodoService {
-  static async findAll(userId: string) {
+  static async findAll(userId: string): Promise<Todo[]> {
     const todos = await database.todo.findMany({
       where: {
         userId: userId,
@@ -14,7 +15,8 @@ export class TodoService {
 
     return todos;
   }
-  static async find(userId: string, todoId: number) {
+
+  static async find(userId: string, todoId: number): Promise<Todo> {
     const todo = await database.todo.findFirst({
       where: {
         id: todoId,
@@ -31,7 +33,11 @@ export class TodoService {
 
     return todo;
   }
-  static async create(userId: string, request: CreateTodoRequest) {
+
+  static async create(
+    userId: string,
+    request: CreateTodoRequest
+  ): Promise<Todo> {
     const todoRequest = validate(TodoSchema.CREATE, request);
 
     const newTodo = await database.todo.create({
@@ -50,7 +56,7 @@ export class TodoService {
     userId: string,
     todoId: number,
     request: EditTodoRequest
-  ) {
+  ): Promise<Todo> {
     const todoRequest = validate(TodoSchema.UPDATE, request);
 
     const todo = await database.todo.findFirst({
@@ -80,7 +86,7 @@ export class TodoService {
     return updatedTodo;
   }
 
-  static async delete(userId: string, todoId: number) {
+  static async delete(userId: string, todoId: number): Promise<void> {
     const todo = await database.todo.findFirst({
       where: {
         id: todoId,
