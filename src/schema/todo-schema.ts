@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export default class TodoSchema {
   static readonly CREATE = z.object({
@@ -17,6 +17,6 @@ export default class TodoSchema {
     .partial()
     .refine(
       (data) => !!data.title || !!data.content || !!data.dueDate || !!data.done,
-      "Either value is required"
+      'Either value is required'
     );
 }

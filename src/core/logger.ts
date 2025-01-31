@@ -1,4 +1,4 @@
-import winston from "winston";
+import winston from 'winston';
 
 const { combine, colorize, simple, prettyPrint, timestamp } = winston.format;
 
@@ -7,13 +7,13 @@ const consoleTransport = new winston.transports.Console({
 });
 
 const fileTransport = new winston.transports.File({
-  level: "error",
-  filename: "./logs/error.log",
+  level: 'error',
+  filename: './logs/error.log',
   format: combine(timestamp(), prettyPrint()),
 });
 
 const transports =
-  process.env.NODE_ENV === "production"
+  process.env.NODE_ENV === 'production'
     ? [consoleTransport, fileTransport]
     : [consoleTransport];
 

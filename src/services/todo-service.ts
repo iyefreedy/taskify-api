@@ -1,9 +1,9 @@
-import { ForbiddenError, NotFoundError } from "../models/http-error";
-import TodoSchema from "../schema/todo-schema";
-import { CreateTodoRequest, EditTodoRequest } from "../models/todo-request";
-import database from "../core/database";
-import { validate } from "../utils/validation";
-import { Todo } from "@prisma/client";
+import { ForbiddenError, NotFoundError } from '../models/http-error';
+import TodoSchema from '../schema/todo-schema';
+import { CreateTodoRequest, EditTodoRequest } from '../models/todo-request';
+import database from '../core/database';
+import { validate } from '../utils/validation';
+import { Todo } from '@prisma/client';
 
 export class TodoService {
   static async findAll(userId: string): Promise<Todo[]> {
@@ -24,11 +24,11 @@ export class TodoService {
     });
 
     if (!todo) {
-      throw new NotFoundError("Resource not found");
+      throw new NotFoundError('Resource not found');
     }
 
     if (todo.userId !== userId) {
-      throw new ForbiddenError("You are not eligible to access this resource");
+      throw new ForbiddenError('You are not eligible to access this resource');
     }
 
     return todo;
@@ -67,7 +67,7 @@ export class TodoService {
     });
 
     if (!todo) {
-      throw new NotFoundError("Resource not found");
+      throw new NotFoundError('Resource not found');
     }
 
     const updatedTodo = await database.todo.update({
@@ -95,7 +95,7 @@ export class TodoService {
     });
 
     if (!todo) {
-      throw new NotFoundError("Resource not found");
+      throw new NotFoundError('Resource not found');
     }
 
     await database.todo.delete({

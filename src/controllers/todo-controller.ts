@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { TodoService } from "../services/todo-service";
+import { Request, Response, NextFunction } from 'express';
+import { TodoService } from '../services/todo-service';
 
 export default class TodoController {
   static async findAll(req: Request, res: Response, next: NextFunction) {

@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
-import { UnauthorizedError } from "../models/http-error";
-import database from "../core/database";
-import { verifyAccessToken } from "../utils/jwt";
+import { NextFunction, Request, Response } from 'express';
+import { UnauthorizedError } from '../models/http-error';
+import database from '../core/database';
+import { verifyAccessToken } from '../utils/jwt';
 
 export default async function authMiddleware(
   req: Request,
@@ -9,10 +9,10 @@ export default async function authMiddleware(
   next: NextFunction
 ) {
   try {
-    const accessToken = req.cookies["accessToken"];
+    const accessToken = req.cookies['accessToken'];
 
     if (accessToken === undefined) {
-      throw new UnauthorizedError("Session expired");
+      throw new UnauthorizedError('Session expired');
     }
 
     const { payload } = await verifyAccessToken(accessToken);
@@ -20,7 +20,7 @@ export default async function authMiddleware(
     const userId = payload.sub;
 
     if (userId === undefined) {
-      throw new UnauthorizedError("Unauthorized");
+      throw new UnauthorizedError('Unauthorized');
     }
 
     const authenticatedUser = await database.user.findFirst({
@@ -35,7 +35,7 @@ export default async function authMiddleware(
     });
 
     if (authenticatedUser === null) {
-      throw new UnauthorizedError("Invalid access token");
+      throw new UnauthorizedError('Invalid access token');
     }
 
     req.user = authenticatedUser;

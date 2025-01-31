@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { InvalidRequestError } from "../models/http-error";
+import { NextFunction, Request, Response } from 'express';
+import { InvalidRequestError } from '../models/http-error';
 
 export const getResourceId = (
   req: Request,
@@ -9,7 +9,7 @@ export const getResourceId = (
   try {
     const resourceId = req.params.id;
     if (!resourceId) {
-      throw new InvalidRequestError("Resource id is required");
+      throw new InvalidRequestError('Resource id is required');
     }
 
     return next();

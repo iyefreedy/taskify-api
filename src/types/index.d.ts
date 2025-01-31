@@ -1,9 +1,9 @@
-import { User } from "@prisma/client";
+import { User } from '@prisma/client';
 
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      NODE_ENV: "development" | "production";
+      NODE_ENV: 'development' | 'production';
       JWT_SECRET: string;
       JWT_EXPIRES_IN: string;
       JWT_ISSUER: string;
@@ -12,7 +12,7 @@ declare global {
 
   namespace Express {
     interface Request {
-      user: Omit<User, "password">;
+      user: Omit<User, 'password'>;
     }
   }
 }

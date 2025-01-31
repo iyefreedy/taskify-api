@@ -1,11 +1,11 @@
-import bcrypt from "bcrypt";
-import { InvalidRequestError } from "../models/http-error";
-import AuthSchema from "../schema/auth-schema";
-import { LoginRequest, RegisterRequest } from "../models/auth-request";
-import database from "../core/database";
-import { validate } from "../utils/validation";
-import { createAccessToken } from "../utils/jwt";
-import logger from "../core/logger";
+import bcrypt from 'bcrypt';
+import { InvalidRequestError } from '../models/http-error';
+import AuthSchema from '../schema/auth-schema';
+import { LoginRequest, RegisterRequest } from '../models/auth-request';
+import database from '../core/database';
+import { validate } from '../utils/validation';
+import { createAccessToken } from '../utils/jwt';
+import logger from '../core/logger';
 
 export class AuthService {
   static async register(request: RegisterRequest) {
@@ -18,7 +18,7 @@ export class AuthService {
     });
 
     if (registeredUser !== null) {
-      throw new InvalidRequestError("Email is already registered");
+      throw new InvalidRequestError('Email is already registered');
     }
 
     const hashedPassword = await bcrypt.hash(registerRequest.password, 10);
@@ -44,7 +44,7 @@ export class AuthService {
 
     logger.info(user);
     if (user === null) {
-      throw new InvalidRequestError("Invalid credential");
+      throw new InvalidRequestError('Invalid credential');
     }
 
     const isPasswordMatch = await bcrypt.compare(
@@ -53,7 +53,7 @@ export class AuthService {
     );
 
     if (!isPasswordMatch) {
-      throw new InvalidRequestError("Invalid credential");
+      throw new InvalidRequestError('Invalid credential');
     }
 
     const accessToken = await createAccessToken({ sub: user.id });

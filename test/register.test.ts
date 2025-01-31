@@ -1,15 +1,15 @@
-import supertest from "supertest";
-import app from "../src/core/app";
-import database from "../src/core/database";
-import bcrypt from "bcrypt";
+import supertest from 'supertest';
+import app from '../src/core/app';
+import database from '../src/core/database';
+import bcrypt from 'bcrypt';
 
-describe("Create new user test", () => {
+describe('Create new user test', () => {
   beforeEach(async () => {
-    const hashedPassword = await bcrypt.hash("password", 10);
+    const hashedPassword = await bcrypt.hash('password', 10);
     await database.user.create({
       data: {
-        name: "User Test",
-        email: "test1@example.com",
+        name: 'User Test',
+        email: 'test1@example.com',
         password: hashedPassword,
       },
     });
@@ -19,38 +19,38 @@ describe("Create new user test", () => {
     await database.user.deleteMany({
       where: {
         email: {
-          in: ["test1@example.com", "test2@example.com"],
+          in: ['test1@example.com', 'test2@example.com'],
         },
       },
     });
   });
 
-  it("should failed due to invalid parameter", async () => {
-    const response = await supertest(app).post("/api/register").send({
-      email: "invalid_email",
-      password: "",
+  it('should failed due to invalid parameter', async () => {
+    const response = await supertest(app).post('/api/register').send({
+      email: 'invalid_email',
+      password: '',
     });
 
     expect(response.status).toEqual(400);
     expect(response.body.error).toBeDefined();
   });
 
-  it("should failed due to existing email", async () => {
-    const response = await supertest(app).post("/api/register").send({
-      name: "User Test",
-      email: "test1@example.com",
-      password: "password",
+  it('should failed due to existing email', async () => {
+    const response = await supertest(app).post('/api/register').send({
+      name: 'User Test',
+      email: 'test1@example.com',
+      password: 'password',
     });
 
     expect(response.status).toEqual(400);
     expect(response.body.error).toBeDefined();
   });
 
-  it("should success to create new user", async () => {
-    const response = await supertest(app).post("/api/register").send({
-      name: "User Test 1",
-      email: "test2@example.com",
-      password: "password",
+  it('should success to create new user', async () => {
+    const response = await supertest(app).post('/api/register').send({
+      name: 'User Test 1',
+      email: 'test2@example.com',
+      password: 'password',
     });
 
     expect(response.status).toEqual(200);

@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
 export default class UserController {
   static async me(req: Request, res: Response, next: NextFunction) {
