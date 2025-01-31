@@ -19,10 +19,6 @@ export default async function authMiddleware(
 
     const userId = payload.sub;
 
-    if (userId === undefined) {
-      throw new UnauthorizedError('Unauthorized');
-    }
-
     const authenticatedUser = await database.user.findFirst({
       where: { id: userId },
       select: {
