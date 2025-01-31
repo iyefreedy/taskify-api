@@ -1,6 +1,6 @@
 import { Router } from "express";
 import authMiddleware from "../middleware/auth-middleware";
-import { TodoController } from "../controllers/todo-controller";
+import TodoController from "../controllers/todo-controller";
 import { getResourceId } from "../middleware/validation-middleware";
 
 const todoRoute = Router();

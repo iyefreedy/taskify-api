@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { ResponseError } from "../models/response-error";
-
-import database from "../utils/database";
+import { UnauthorizedError } from "../models/http-error";
+import database from "../core/database";
 import { verifyAccessToken } from "../utils/jwt";
 
 export default async function authMiddleware(
@@ -10,24 +9,18 @@ export default async function authMiddleware(
   next: NextFunction
 ) {
   try {
-    const authHeader = req.header("Authorization");
+    const accessToken = req.cookies["accessToken"];
 
-    if (authHeader === undefined) {
-      throw new ResponseError(401, "Authorization header required");
+    if (accessToken === undefined) {
+      throw new UnauthorizedError("Session expired");
     }
-
-    if (!authHeader.startsWith("Bearer ")) {
-      throw new ResponseError(401, "Invalid access token");
-    }
-
-    const accessToken = authHeader.slice(7);
 
     const { payload } = await verifyAccessToken(accessToken);
 
     const userId = payload.sub;
 
     if (userId === undefined) {
-      throw new ResponseError(401, "Unauthorized");
+      throw new UnauthorizedError("Unauthorized");
     }
 
     const authenticatedUser = await database.user.findFirst({
@@ -42,7 +35,7 @@ export default async function authMiddleware(
     });
 
     if (authenticatedUser === null) {
-      throw new ResponseError(401, "Unauthorized");
+      throw new UnauthorizedError("Invalid access token");
     }
 
     req.user = authenticatedUser;

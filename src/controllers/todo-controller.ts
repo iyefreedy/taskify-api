@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { TodoService } from "../services/todo-service";
 
-export class TodoController {
+export default class TodoController {
   static async findAll(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await TodoService.findAll(req.user!.id);

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-export class UserController {
+export default class UserController {
   static async me(req: Request, res: Response, next: NextFunction) {
     try {
       const currentUser = req.user!;

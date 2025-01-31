@@ -1,8 +1,8 @@
 import request from "supertest";
-import app from "../../src/app";
+import app from "../../src/core/app";
 import { createAccessToken } from "../../src/utils/jwt";
 import bcrypt from "bcrypt";
-import database from "../../src/utils/database";
+import database from "../../src/core/database";
 
 describe("POST /api/todos", () => {
   beforeEach(async () => {

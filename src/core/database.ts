@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import logging from "./logging";
+import logger from "./logger";
 
 const database = new PrismaClient({
   log: [
@@ -23,19 +23,19 @@ const database = new PrismaClient({
 });
 
 database.$on("query", (e) => {
-  logging.info(`Query: ${e.query} ${e.params}, ${e.duration}ms`);
+  logger.info(`Query: ${e.query} ${e.params}, ${e.duration}ms`);
 });
 
 database.$on("info", (e) => {
-  logging.info(`Info: ${e.message}`);
+  logger.info(`Info: ${e.message}`);
 });
 
 database.$on("warn", (e) => {
-  logging.warn(`Warn: ${e.message}`);
+  logger.warn(`Warn: ${e.message}`);
 });
 
 database.$on("error", (e) => {
-  logging.error(`Error: ${e.message}`);
+  logger.error(`Error: ${e.message}`);
 });
 
 export default database;

@@ -1,8 +1,8 @@
-import { ResponseError } from "../models/response-error";
-import { TodoSchema } from "../schema/todo-schema";
+import { ForbiddenError, NotFoundError } from "../models/http-error";
+import TodoSchema from "../schema/todo-schema";
 import { CreateTodoRequest, EditTodoRequest } from "../types";
-import database from "../utils/database";
-import { Validation } from "../utils/validation";
+import database from "../core/database";
+import { validate } from "../utils/validation";
 
 export class TodoService {
   static async findAll(userId: string) {
@@ -22,20 +22,17 @@ export class TodoService {
     });
 
     if (!todo) {
-      throw new ResponseError(404, "Resource not found");
+      throw new NotFoundError("Resource not found");
     }
 
     if (todo.userId !== userId) {
-      throw new ResponseError(
-        403,
-        "You are not eligible to access this resource"
-      );
+      throw new ForbiddenError("You are not eligible to access this resource");
     }
 
     return todo;
   }
   static async create(userId: string, request: CreateTodoRequest) {
-    const todoRequest = Validation.validate(TodoSchema.CREATE, request);
+    const todoRequest = validate(TodoSchema.CREATE, request);
 
     const newTodo = await database.todo.create({
       data: {
@@ -54,23 +51,17 @@ export class TodoService {
     todoId: number,
     request: EditTodoRequest
   ) {
-    const todoRequest = Validation.validate(TodoSchema.UPDATE, request);
+    const todoRequest = validate(TodoSchema.UPDATE, request);
 
     const todo = await database.todo.findFirst({
       where: {
         id: todoId,
+        userId: userId,
       },
     });
 
     if (!todo) {
-      throw new ResponseError(404, "Resource not found");
-    }
-
-    if (todo.userId !== userId) {
-      throw new ResponseError(
-        403,
-        "You are not eligible to access this resource"
-      );
+      throw new NotFoundError("Resource not found");
     }
 
     const updatedTodo = await database.todo.update({
@@ -93,18 +84,12 @@ export class TodoService {
     const todo = await database.todo.findFirst({
       where: {
         id: todoId,
+        userId: userId,
       },
     });
 
     if (!todo) {
-      throw new ResponseError(404, "Resource not found");
-    }
-
-    if (todo.userId !== userId) {
-      throw new ResponseError(
-        403,
-        "You are not eligible to access this resource"
-      );
+      throw new NotFoundError("Resource not found");
     }
 
     await database.todo.delete({

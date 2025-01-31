@@ -16,10 +16,10 @@ const transports =
       ]
     : [consoleTransport];
 
-const logging = winston.createLogger({
+const logger = winston.createLogger({
   level: "info",
   format: winston.format.json(),
   transports,
 });
 
-export default logging;
+export default logger;

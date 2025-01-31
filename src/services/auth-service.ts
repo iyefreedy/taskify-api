@@ -1,15 +1,15 @@
 import bcrypt from "bcrypt";
-import { ResponseError } from "../models/response-error";
-import { AuthSchema } from "../schema/auth-schema";
+import { InvalidRequestError } from "../models/http-error";
+import AuthSchema from "../schema/auth-schema";
 import { LoginRequest, RegisterRequest } from "../types";
-import database from "../utils/database";
-import { Validation } from "../utils/validation";
+import database from "../core/database";
+import { validate } from "../utils/validation";
 import { createAccessToken } from "../utils/jwt";
-import logging from "../utils/logging";
+import logger from "../core/logger";
 
 export class AuthService {
   static async register(request: RegisterRequest) {
-    const registerRequest = Validation.validate(AuthSchema.REGISTER, request);
+    const registerRequest = validate(AuthSchema.REGISTER, request);
 
     const registeredUser = await database.user.findUnique({
       where: {
@@ -18,7 +18,7 @@ export class AuthService {
     });
 
     if (registeredUser !== null) {
-      throw new ResponseError(400, "Email is already registered");
+      throw new InvalidRequestError("Email is already registered");
     }
 
     const hashedPassword = await bcrypt.hash(registerRequest.password, 10);
@@ -36,15 +36,15 @@ export class AuthService {
   }
 
   static async login(request: LoginRequest) {
-    const loginRequest = Validation.validate(AuthSchema.LOGIN, request);
+    const loginRequest = validate(AuthSchema.LOGIN, request);
 
     const user = await database.user.findUnique({
       where: { email: loginRequest.email },
     });
 
-    logging.info(user);
+    logger.info(user);
     if (user === null) {
-      throw new ResponseError(400, "Invalid credential");
+      throw new InvalidRequestError("Invalid credential");
     }
 
     const isPasswordMatch = await bcrypt.compare(
@@ -53,7 +53,7 @@ export class AuthService {
     );
 
     if (!isPasswordMatch) {
-      throw new ResponseError(400, "Invalid credential");
+      throw new InvalidRequestError("Invalid credential");
     }
 
     const accessToken = await createAccessToken({ sub: user.id });

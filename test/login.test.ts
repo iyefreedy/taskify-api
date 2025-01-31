@@ -1,7 +1,7 @@
 import supertest from "supertest";
-import app from "../src/app";
-import logging from "../src/utils/logging";
-import database from "../src/utils/database";
+import app from "../src/core/app";
+import logger from "../src/core/logger";
+import database from "../src/core/database";
 import bcrypt from "bcrypt";
 
 describe("Authenticate user", () => {
@@ -30,7 +30,7 @@ describe("Authenticate user", () => {
       password: "test",
     });
 
-    logging.info(JSON.stringify(response.body));
+    logger.info(JSON.stringify(response.body));
     expect(response.status).toBe(400);
     expect(response.body.error).toBeDefined();
   });
@@ -41,7 +41,7 @@ describe("Authenticate user", () => {
       password: "password",
     });
 
-    logging.info(JSON.stringify(response.body));
+    logger.info(JSON.stringify(response.body));
     expect(response.status).toBe(400);
     expect(response.body.error).toBeDefined();
   });
@@ -52,7 +52,7 @@ describe("Authenticate user", () => {
       password: "test12345678",
     });
 
-    logging.info(JSON.stringify(response.body));
+    logger.info(JSON.stringify(response.body));
     expect(response.status).toBe(200);
     expect(response.body.accessToken).toBeDefined();
   });

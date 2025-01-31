@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export class TodoSchema {
+export default class TodoSchema {
   static readonly CREATE = z.object({
     title: z.string().min(1),
     content: z.string().optional(),

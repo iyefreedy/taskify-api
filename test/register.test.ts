@@ -1,6 +1,6 @@
 import supertest from "supertest";
-import app from "../src/app";
-import database from "../src/utils/database";
+import app from "../src/core/app";
+import database from "../src/core/database";
 import bcrypt from "bcrypt";
 
 describe("Create new user test", () => {
